@@ -12,7 +12,6 @@ class Encoder:
         self.state = '00'
         self.direction = None
         self.callback = callback
-        self.hue = 100
         GPIO.setup(self.leftPin, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
         GPIO.setup(self.rightPin, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
         GPIO.add_event_detect(self.leftPin, GPIO.BOTH, callback=self.transitionOccurred)  
@@ -36,10 +35,7 @@ class Encoder:
                 if self.direction == "L":
                     self.value = self.value - 1
                     if self.callback is not None:
-                        self.hue -= 1
-                        if self.hue < 0:
-                            self.hue += 360
-                        self.callback(self.value, self.direction, self.hue)
+                        self.callback(self.value, self.direction)
 
         elif self.state == "10": # R3 or L1
             if newState == "11": # Turned left 1
@@ -48,10 +44,7 @@ class Encoder:
                 if self.direction == "R":
                     self.value = self.value + 1
                     if self.callback is not None:
-                        self.hue += 1
-                        if self.hue > 360:
-                            self.hue -= 360
-                        self.callback(self.value, self.direction, self.hue)
+                        self.callback(self.value, self.direction)
 
         else: # self.state == "11"
             if newState == "01": # Turned left 1
@@ -62,17 +55,11 @@ class Encoder:
                 if self.direction == "L":
                     self.value = self.value - 1
                     if self.callback is not None:
-                        self.hue -= 1
-                        if self.hue < 0:
-                            self.hue += 360
-                        self.callback(self.value, self.direction, self.hue)
+                        self.callback(self.value, self.direction)
                 elif self.direction == "R":
                     self.value = self.value + 1
                     if self.callback is not None:
-                        self.hue += 1
-                        if self.hue > 360:
-                            self.hue -= 360
-                        self.callback(self.value, self.direction, self.hue)
+                        self.callback(self.value, self.direction)
                 
         self.state = newState
 
