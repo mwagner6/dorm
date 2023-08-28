@@ -15,7 +15,7 @@ class Controller:
         self.indices = {"rainbow": np.zeros((npixels, 3), dtype=np.uint8), "singlecolor": np.zeros((npixels, 3), dtype=np.uint8), "stars": np.zeros((npixels, 3), dtype=np.uint8), "gradient": np.zeros((npixels, 3), dtype=np.uint8), "breathing": np.zeros((npixels, 3), dtype=np.uint8), "twocolor": np.zeros((npixels, 3), dtype=np.uint8)}
         self.stars = []
         self.currentpattern = 'twocolor'
-        self.rainbowcounter = 0
+        self.positioncounter = 0
         self.h1 = 0
         self.s1 = 0
         self.v1 = 0
@@ -38,11 +38,11 @@ class Controller:
 
     def advancePatterns(self):
         if self.currentpattern == 'rainbow':
-            self.rainbowcounter += 1
-            if self.rainbowcounter > 100:
-                self.rainbowcounter -= 100
+            self.positioncounter += 1
+            if self.positioncounter > 100:
+                self.positioncounter -= 100
             for i in range(self.npixels):
-                h = (i+self.rainbowcounter) % 100
+                h = (i+self.positioncounter) % 100
                 rgbvals = self.hsv2rgb_pg(h, 100, 100)
                 self.indices['rainbow'][i, 0] = rgbvals[0]
                 self.indices['rainbow'][i, 1] = rgbvals[1] 
@@ -79,7 +79,19 @@ class Controller:
                     remindices.append(i)
             for index in sorted(remindices, reverse=True):
                 del self.stars[index]
-            
+        if self.currentpattern == 'gradient':
+            self.positioncounter += 1
+            if self.positioncounter > 100:
+                self.positioncounter -= 100
+            for i in range(self.npixels):
+                sinpos = (self.positioncounter + i) / 50
+                val = 0.5 + (np.sin(sinpos) / 2)
+                colors1 = self.hsv2rgb_pg(self.h1, self.s1, self.v1)
+                colors2 = self.hsv2rgb_pg(self.h2, self.s2, self.v2)
+                self.indices[self.currentpattern][i, 0] = val * colors1[0] + (1-val) * colors2[0]
+                self.indices[self.currentpattern][i, 1] = val * colors1[1] + (1-val) * colors2[1]
+                self.indices[self.currentpattern][i, 2] = val * colors1[2] + (1-val) * colors2[2]
+
 
         if self.currentpattern == 'twocolor':
             for i in range(self.npixels):
