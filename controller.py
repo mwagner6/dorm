@@ -80,6 +80,7 @@ class Controller:
     def clickInput(self):
         if self.currentSection == 0 and self.currentItem is not None:
             self.currentpattern = self.currentItem
+            print(self.currentpattern)
 
     def rotaryRight(self):
         if self.currentItem == "hbar1":
