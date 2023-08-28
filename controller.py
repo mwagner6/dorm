@@ -135,7 +135,7 @@ class Controller:
                 if self.currentcolor > 1 + len(self.listColors):
                     self.currentcolor = 0
                 if self.currentcolor < len(self.listColors):
-                    currentColor = self.hsv2rgb_pg(self.listColors[currentColor][0], self.listColors[currentColor][1], self.listColors[currentColor][2])
+                    currentColor = self.hsv2rgb_pg(self.listColors[self.currentcolor][0], self.listColors[self.currentcolor][1], self.listColors[self.currentcolor][2])
                 elif self.currentcolor == len(self.listColors):
                     currentColor = self.hsv2rgb_pg(self.h1, self.s1, self.v1)
                 else:
