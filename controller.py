@@ -81,8 +81,8 @@ class Controller:
                 del self.stars[index]
         if self.currentpattern == 'gradient':
             self.positioncounter += 1
-            if self.positioncounter > 100:
-                self.positioncounter -= 100
+            if self.positioncounter > 100 * np.pi:
+                self.positioncounter = 0
             for i in range(self.npixels):
                 sinpos = (self.positioncounter + i) / 50
                 val = 0.5 + (np.sin(sinpos) / 2)
