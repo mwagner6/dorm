@@ -34,7 +34,7 @@ GPIO.setmode(GPIO.BCM)
 e1 = Encoder(23, 17, valueChanged)
 
 while True:
-    for event in pygame.events.get():
+    for event in pygame.event.get():
         if event.type == pygame.QUIT:
             pygame.quit()
             for i in range(led_count):

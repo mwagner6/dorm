@@ -1,4 +1,4 @@
-import cv2
+
 import pygame
 import numpy as np
 import colorsys
