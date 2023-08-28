@@ -1,4 +1,5 @@
 import pygame
+import random
 import numpy as np
 import colorsys
 from rpi_ws281x import *
@@ -12,6 +13,7 @@ class Controller:
         self.npixels = npixels
         self.menus = {"Pattern": ["rainbow", "singlecolor", "stars", "gradient", "breathing", "twocolor"], "Color 1": ["hbar1", "sbar1", "vbar1"], "Color 2": ["hbar2", "sbar2", "vbar2"]}
         self.indices = {"rainbow": np.zeros((npixels, 3), dtype=np.uint8), "singlecolor": np.zeros((npixels, 3), dtype=np.uint8), "stars": np.zeros((npixels, 3), dtype=np.uint8), "gradient": np.zeros((npixels, 3), dtype=np.uint8), "breathing": np.zeros((npixels, 3), dtype=np.uint8), "twocolor": np.zeros((npixels, 3), dtype=np.uint8)}
+        self.stars = []
         self.currentpattern = 'twocolor'
         self.rainbowcounter = 0
         self.h1 = 0
@@ -35,6 +37,41 @@ class Controller:
         strip.show()
 
     def advancePatterns(self):
+        if self.currentpattern == 'rainbow':
+            self.rainbowcounter += 1
+            if self.rainbowcounter > 100:
+                self.rainbowcounter -= 100
+            for i in range(self.npixels):
+                h = (i+self.rainbowcounter) % 100
+                rgbvals = self.hsv2rgb_pg(h, 100, 100)
+                self.indices['rainbow'][i, 0] = rgbvals[0]
+                self.indices['rainbow'][i, 1] = rgbvals[1] 
+                self.indices['rainbow'][i, 2] = rgbvals[2]
+        if self.currentpattern == 'singlecolor':
+            for i in range(self.npixels):
+                colors = self.hsv2rgb_pg(self.h1, self.s1, self.v1)
+                self.indices[self.currentpattern][i, 0] = colors[0]
+                self.indices[self.currentpattern][i, 1] = colors[1]
+                self.indices[self.currentpattern][i, 2] = colors[2]
+        if self.currentpattern == 'stars':
+            lightvals = [0] * self.npixels
+            for i in range(self.npixels):
+                if random.random() < 0.0005:
+                    self.stars.append([i, 100])
+            for star in self.stars:
+                star[1] -= 1
+                for d in range(-5, 6):
+                    dist = abs(d)
+                    lightvals[star[0]+d] += (1 - dist*0.18) * star[1]/100
+            for i in range(self.npixels):
+                if lightvals[i] > 1:
+                    lightvals[i] = 1
+                colors1 = self.hsv2rgb_pg(self.h1, self.s1, self.v1)
+                colors2 = self.hsv2rgb_pg(self.h2, self.s2, self.v2)
+                self.indices[self.currentpattern][i, 0] = lightvals[i] * colors1[0] + (1-lightvals[i]) * colors2[0]
+                self.indices[self.currentpattern][i, 1] = lightvals[i] * colors1[1] + (1-lightvals[i]) * colors2[1]
+                self.indices[self.currentpattern][i, 2] = lightvals[i] * colors1[2] + (1-lightvals[i]) * colors2[2]
+
         if self.currentpattern == 'twocolor':
             for i in range(self.npixels):
                 if i % 2 == 0:
@@ -44,14 +81,7 @@ class Controller:
                 self.indices[self.currentpattern][i, 0] = colors[0]
                 self.indices[self.currentpattern][i, 1] = colors[1]
                 self.indices[self.currentpattern][i, 2] = colors[2]
-        if self.currentpattern == 'rainbow':
-            self.rainbowcounter += 1
-            for i in range(self.npixels):
-                h = (i+self.rainbowcounter) % 100
-                rgbvals = self.hsv2rgb_pg(h, 100, 100)
-                self.indices['rainbow'][i, 0] = rgbvals[0]
-                self.indices['rainbow'][i, 1] = rgbvals[1] 
-                self.indices['rainbow'][i, 2] = rgbvals[2]
+        
 
     def rightInput(self):
         if self.currentItem == None:
