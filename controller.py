@@ -73,7 +73,7 @@ class Controller:
                 self.indices[self.currentpattern][i, 1] = lightvals[i] * colors1[1] + (1-lightvals[i]) * colors2[1]
                 self.indices[self.currentpattern][i, 2] = lightvals[i] * colors1[2] + (1-lightvals[i]) * colors2[2]
             remindices = []
-            for i in self.stars:
+            for i in range(len(self.stars)):
                 star = self.stars[i]
                 if star[1] == 0:
                     remindices.append(i)
