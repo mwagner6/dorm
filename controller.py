@@ -13,6 +13,7 @@ class Controller:
         self.menus = {"Pattern": ["rainbow", "singlecolor", "stars", "gradient", "breathing", "twocolor"], "Color 1": ["hbar1", "sbar1", "vbar1"], "Color 2": ["hbar2", "sbar2", "vbar2"]}
         self.indices = {"rainbow": np.zeros((npixels, 3), dtype=np.uint8), "singlecolor": np.zeros((npixels, 3), dtype=np.uint8), "stars": np.zeros((npixels, 3), dtype=np.uint8), "gradient": np.zeros((npixels, 3), dtype=np.uint8), "breathing": np.zeros((npixels, 3), dtype=np.uint8), "twocolor": np.zeros((npixels, 3), dtype=np.uint8)}
         self.currentpattern = 'twocolor'
+        self.rainbowcounter = 0
         self.h1 = 0
         self.s1 = 0
         self.v1 = 0
@@ -43,6 +44,14 @@ class Controller:
                 self.indices[self.currentpattern][i, 0] = colors[0]
                 self.indices[self.currentpattern][i, 1] = colors[1]
                 self.indices[self.currentpattern][i, 2] = colors[2]
+        if self.currentpattern == 'rainbow':
+            self.rainbowcounter += 1
+            for i in range(self.npixels):
+                h = (i+self.rainbowcounter) % 100
+                rgbvals = self.hsv2rgb_pg(h, 100, 100)
+                self.indices['rainbow'][i, 0] = rgbvals[0]
+                self.indices['rainbow'][i, 1] = rgbvals[1] 
+                self.indices['rainbow'][i, 2] = rgbvals[2]
 
     def rightInput(self):
         if self.currentItem == None:
@@ -80,7 +89,6 @@ class Controller:
     def clickInput(self):
         if self.currentSection == 0 and self.currentItem is not None:
             self.currentpattern = self.currentItem
-            print(self.currentpattern)
 
     def rotaryRight(self):
         if self.currentItem == "hbar1":
