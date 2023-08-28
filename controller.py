@@ -11,9 +11,12 @@ class Controller:
         self.currentSection = 0
         self.columnpos = 0
         self.npixels = npixels
-        self.menus = {"Pattern": ["rainbow", "singlecolor", "stars", "gradient", "breathing", "twocolor"], "Color 1": ["hbar1", "sbar1", "vbar1"], "Color 2": ["hbar2", "sbar2", "vbar2"], "Add Colors": ["hbarS", "sbarS", "vbarS"], "Clear Colors": ["Reset Colors"]}
-        self.indices = {"rainbow": np.zeros((npixels, 3), dtype=np.uint8), "singlecolor": np.zeros((npixels, 3), dtype=np.uint8), "stars": np.zeros((npixels, 3), dtype=np.uint8), "gradient": np.zeros((npixels, 3), dtype=np.uint8), "breathing": np.zeros((npixels, 3), dtype=np.uint8), "twocolor": np.zeros((npixels, 3), dtype=np.uint8)}
+        self.menus = {"Pattern": ["rainbow", "singlecolor", "stars", "gradient", "breathing", "twocolor", "shooters"], "Color 1": ["hbar1", "sbar1", "vbar1"], "Color 2": ["hbar2", "sbar2", "vbar2"], "Add Colors": ["hbarS", "sbarS", "vbarS"], "Clear Colors": ["Reset Colors"]}
+        self.indices = {"rainbow": np.zeros((npixels, 3), dtype=np.uint8), "singlecolor": np.zeros((npixels, 3), dtype=np.uint8), "stars": np.zeros((npixels, 3), dtype=np.uint8), "gradient": np.zeros((npixels, 3), dtype=np.uint8), "breathing": np.zeros((npixels, 3), dtype=np.uint8), "twocolor": np.zeros((npixels, 3), dtype=np.uint8), "shooters": np.zeros((npixels, 3), dtype=np.uint8)}
         self.stars = []
+        self.shooters = []
+        self.shootertimer = 0
+        self.currentcolor = 0
         self.currentpattern = 'twocolor'
         self.positioncounter = 0
         self.h1 = 0
@@ -115,7 +118,6 @@ class Controller:
                 self.indices[self.currentpattern][i, 1] = val * color[1]
                 self.indices[self.currentpattern][i, 2] = val * color[2]
 
-
         if self.currentpattern == 'twocolor':
             for i in range(self.npixels):
                 if i % 2 == 0:
@@ -126,6 +128,30 @@ class Controller:
                 self.indices[self.currentpattern][i, 1] = colors[1]
                 self.indices[self.currentpattern][i, 2] = colors[2]
         
+        if self.currentpattern == 'shooters':
+            self.shootertimer += 1
+            if self.shootertimer == 60:
+                self.currentcolor += 1
+                if self.currentcolor > 1 + len(self.listColors):
+                    self.currentcolor = 0
+                if self.currentcolor < len(self.listColors):
+                    currentColor = self.hsv2rgb_pg(self.listColors[currentColor][0], self.listColors[currentColor][1], self.listColors[currentColor][2])
+                elif self.currentcolor == len(self.listColors):
+                    currentColor = self.hsv2rgb_pg(self.h1, self.s1, self.v1)
+                else:
+                    currentColor = self.hsv2rgb_pg(self.h2, self.s2, self.v2)
+                self.shootertimer = 0
+                self.shooters.insert(0, [0, currentColor])
+            for shooter in self.shooters:
+                shooter[0] += 1
+                if shooter[0] == self.npixels:
+                    del shooter
+                else:
+                    for i in range(0, 6):
+                        self.indices[self.currentpattern][shooter[0]-i, 0] = shooter[1][0] * (1 - i/5)
+                        self.indices[self.currentpattern][shooter[0]-i, 1] = shooter[1][1] * (1 - i/5)
+                        self.indices[self.currentpattern][shooter[0]-i, 2] = shooter[1][2] * (1 - i/5)
+                    
 
     def rightInput(self):
         if self.currentItem == None:
