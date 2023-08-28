@@ -14,7 +14,7 @@ led_dma = 10
 led_brightness = 255
 led_invert = False
 led_channel = 0
-controller = Controller()
+controller = Controller(led_count)
 
 strip = Adafruit_NeoPixel(led_count, lightstrip_datapin, led_hz, led_dma, led_invert, led_brightness, led_channel)
 strip.begin()
