@@ -143,53 +143,53 @@ class Controller:
 
     def rotaryRight(self):
         if self.currentItem == "hbar1":
-            self.h1 += 4
+            self.h1 += 1
             if self.h1 > 100:
                 self.h1 -= 100
         if self.currentItem == "sbar1":
-            self.s1 += 4
+            self.s1 += 1
             if self.s1 > 100:
                 self.s1 -= 100
         if self.currentItem == "vbar1":
-            self.v1 += 4
+            self.v1 += 1
             if self.v1 > 100:
                 self.v1 -= 100
         if self.currentItem == "hbar2":
-            self.h2 += 4
+            self.h2 += 1
             if self.h2 > 100:
                 self.h2 -= 100
         if self.currentItem == "sbar2":
-            self.s2 += 4
+            self.s2 += 1
             if self.s2 > 100:
                 self.s2 -= 100
         if self.currentItem == "vbar2":
-            self.v2 += 4
+            self.v2 += 1
             if self.v2 > 100:
                 self.v2 -= 100
 
     def rotaryLeft(self):
         if self.currentItem == "hbar1":
-            self.h1 -= 4
+            self.h1 -= 1
             if self.h1 < 0:
                 self.h1 += 100
         if self.currentItem == "sbar1":
-            self.s1 -= 4
+            self.s1 -= 1
             if self.s1 < 0:
                 self.s1 += 100
         if self.currentItem == "vbar1":
-            self.v1 -= 4
+            self.v1 -= 1
             if self.v1 < 0:
                 self.v1 += 100
         if self.currentItem == "hbar2":
-            self.h2 -= 4
+            self.h2 -= 1
             if self.h2 < 0:
                 self.h2 += 100
         if self.currentItem == "sbar2":
-            self.s2 -= 4
+            self.s2 -= 1
             if self.s2 < 0:
                 self.s2 += 100
         if self.currentItem == "vbar2":
-            self.v2 -= 4
+            self.v2 -= 1
             if self.v2 < 0:
                 self.v2 += 100
 
