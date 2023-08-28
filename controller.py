@@ -11,7 +11,7 @@ class Controller:
         self.currentSection = 0
         self.columnpos = 0
         self.npixels = npixels
-        self.menus = {"Pattern": ["rainbow", "singlecolor", "stars", "gradient", "breathing", "twocolor"], "Color 1": ["hbar1", "sbar1", "vbar1"], "Color 2": ["hbar2", "sbar2", "vbar2"], "Add Colors": ["hbarS", "sbarS", "vbarS"], "Clear Colors": ["Reset Color List"]}
+        self.menus = {"Pattern": ["rainbow", "singlecolor", "stars", "gradient", "breathing", "twocolor"], "Color 1": ["hbar1", "sbar1", "vbar1"], "Color 2": ["hbar2", "sbar2", "vbar2"], "Add Colors": ["hbarS", "sbarS", "vbarS"], "Clear Colors": ["Reset Colors"]}
         self.indices = {"rainbow": np.zeros((npixels, 3), dtype=np.uint8), "singlecolor": np.zeros((npixels, 3), dtype=np.uint8), "stars": np.zeros((npixels, 3), dtype=np.uint8), "gradient": np.zeros((npixels, 3), dtype=np.uint8), "breathing": np.zeros((npixels, 3), dtype=np.uint8), "twocolor": np.zeros((npixels, 3), dtype=np.uint8)}
         self.stars = []
         self.currentpattern = 'twocolor'
@@ -41,7 +41,6 @@ class Controller:
         strip.show()
 
     def advancePatterns(self):
-
         if self.currentpattern == 'rainbow':
             self.positioncounter += 1
             if self.positioncounter > 100:
@@ -164,6 +163,13 @@ class Controller:
     def clickInput(self):
         if self.currentSection == 0 and self.currentItem is not None:
             self.currentpattern = self.currentItem
+        if self.currentSection == 3 and self.currentItem is not None:
+            self.listColors.append([self.selectingH, self.selectingS, self.selectingV])
+            self.selectingH = 0
+            self.selectingS = 0
+            self.selectingV = 0
+        if self.currentSection == 4 and self.currentItem is not None:
+            self.listColors = []
 
     def rotaryRight(self):
         if self.currentItem == "hbar1":
