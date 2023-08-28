@@ -148,6 +148,8 @@ class Controller:
                     del shooter
                 else:
                     for i in range(0, 6):
+                        if shooter[0]-i >= self.npixels-2:
+                            continue
                         self.indices[self.currentpattern][shooter[0]-i, 0] = shooter[1][0] * (1 - i/5)
                         self.indices[self.currentpattern][shooter[0]-i, 1] = shooter[1][1] * (1 - i/5)
                         self.indices[self.currentpattern][shooter[0]-i, 2] = shooter[1][2] * (1 - i/5)
