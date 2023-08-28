@@ -11,7 +11,7 @@ class Controller:
         self.columnpos = 0
         self.npixels = npixels
         self.menus = {"Pattern": ["rainbow", "singlecolor", "stars", "gradient", "breathing", "twocolor"], "Color 1": ["hbar1", "sbar1", "vbar1"], "Color 2": ["hbar2", "sbar2", "vbar2"]}
-        self.indices = {"rainbow": np.zeros((npixels, 3)), "singlecolor": np.zeros((npixels, 3)), "stars": np.zeros((npixels, 3)), "gradient": np.zeros((npixels, 3)), "breathing": np.zeros((npixels, 3)), "twocolor": np.zeros((npixels, 3))}
+        self.indices = {"rainbow": np.zeros((npixels, 3), dtype=np.uint8), "singlecolor": np.zeros((npixels, 3), dtype=np.uint8), "stars": np.zeros((npixels, 3), dtype=np.uint8), "gradient": np.zeros((npixels, 3), dtype=np.uint8), "breathing": np.zeros((npixels, 3), dtype=np.uint8), "twocolor": np.zeros((npixels, 3), dtype=np.uint8)}
         self.currentpattern = 'twocolor'
         self.h1 = 0
         self.s1 = 0
