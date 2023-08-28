@@ -51,7 +51,7 @@ while True:
                 controller.upInput()
             if event.key == pygame.K_DOWN:
                 controller.downInput()
-            if event.key == pygame.K_KP_ENTER:
+            if event.key == pygame.K_q:
                 controller.clickInput()
     controller.advancePatterns()
     controller.updateStrip(strip)
