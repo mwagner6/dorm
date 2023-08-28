@@ -37,6 +37,7 @@ class Controller:
         strip.show()
 
     def advancePatterns(self):
+
         if self.currentpattern == 'rainbow':
             self.positioncounter += 1
             if self.positioncounter > 100:
@@ -47,12 +48,14 @@ class Controller:
                 self.indices['rainbow'][i, 0] = rgbvals[0]
                 self.indices['rainbow'][i, 1] = rgbvals[1] 
                 self.indices['rainbow'][i, 2] = rgbvals[2]
+
         if self.currentpattern == 'singlecolor':
             for i in range(self.npixels):
                 colors = self.hsv2rgb_pg(self.h1, self.s1, self.v1)
                 self.indices[self.currentpattern][i, 0] = colors[0]
                 self.indices[self.currentpattern][i, 1] = colors[1]
                 self.indices[self.currentpattern][i, 2] = colors[2]
+
         if self.currentpattern == 'stars':
             lightvals = [0] * self.npixels
             for i in range(self.npixels):
@@ -79,6 +82,7 @@ class Controller:
                     remindices.append(i)
             for index in sorted(remindices, reverse=True):
                 del self.stars[index]
+
         if self.currentpattern == 'gradient':
             self.positioncounter += 1
             if self.positioncounter > 100 * np.pi:
@@ -91,6 +95,22 @@ class Controller:
                 self.indices[self.currentpattern][i, 0] = val * colors1[0] + (1-val) * colors2[0]
                 self.indices[self.currentpattern][i, 1] = val * colors1[1] + (1-val) * colors2[1]
                 self.indices[self.currentpattern][i, 2] = val * colors1[2] + (1-val) * colors2[2]
+        
+        if self.currentpattern == 'breathing':
+            self.positioncounter += 1
+            if self.positioncounter > 200:
+                self.positioncounter = 0
+            if self.positioncounter < 100:
+                sinpos = self.positioncounter * np.pi / 100
+                color = self.hsv2rgb_ph(self.h1, self.s1, self.v1)
+            else:
+                sinpos = (self.positioncounter - 100) * np.pi / 100
+                color = self.hsv2rgb_pg(self.h2, self.s2, self.v2)
+            for i in range(self.npixels):
+                val = abs(np.sin(sinpos))
+                self.indices[self.currentpattern][i, 0] = val * color[0]
+                self.indices[self.currentpattern][i, 1] = val * color[1]
+                self.indices[self.currentpattern][i, 2] = val * color[2]
 
 
         if self.currentpattern == 'twocolor':
