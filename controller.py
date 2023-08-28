@@ -7,11 +7,11 @@ from rpi_ws281x import *
 
 class Controller:
     def __init__(self, npixels):
-        self.sections = ["Pattern", "Color 1", "Color 2"]
+        self.sections = ["Pattern", "Color 1", "Color 2", "Add Colors", "Clear Colors"]
         self.currentSection = 0
         self.columnpos = 0
         self.npixels = npixels
-        self.menus = {"Pattern": ["rainbow", "singlecolor", "stars", "gradient", "breathing", "twocolor"], "Color 1": ["hbar1", "sbar1", "vbar1"], "Color 2": ["hbar2", "sbar2", "vbar2"]}
+        self.menus = {"Pattern": ["rainbow", "singlecolor", "stars", "gradient", "breathing", "twocolor"], "Color 1": ["hbar1", "sbar1", "vbar1"], "Color 2": ["hbar2", "sbar2", "vbar2"], "Add Colors": ["hbarS", "sbarS", "vbarS"], "Clear Colors": ["Reset Color List"]}
         self.indices = {"rainbow": np.zeros((npixels, 3), dtype=np.uint8), "singlecolor": np.zeros((npixels, 3), dtype=np.uint8), "stars": np.zeros((npixels, 3), dtype=np.uint8), "gradient": np.zeros((npixels, 3), dtype=np.uint8), "breathing": np.zeros((npixels, 3), dtype=np.uint8), "twocolor": np.zeros((npixels, 3), dtype=np.uint8)}
         self.stars = []
         self.currentpattern = 'twocolor'
@@ -22,6 +22,10 @@ class Controller:
         self.h2 = 0
         self.s2 = 0
         self.v2 = 0
+        self.listColors = []
+        self.selectingH = 0
+        self.selectingS = 0
+        self.selectingV = 0
         self.currentItem = None
         pygame.init()
         self.screen = pygame.display.set_mode((800, 480))
@@ -186,6 +190,18 @@ class Controller:
             self.v2 += 1
             if self.v2 > 100:
                 self.v2 -= 100
+        if self.currentItem == "hbarS":
+            self.selectingH += 1
+            if self.selectingH > 100:
+                self.selectingH -= 100
+        if self.currentItem == "sbarS":
+            self.selectingS += 1
+            if self.selectingS > 100:
+                self.selectingS -= 100
+        if self.currentItem == "vbarS":
+            self.selectingV += 1
+            if self.selectingV > 100:
+                self.selectingV -= 100
 
     def rotaryLeft(self):
         if self.currentItem == "hbar1":
@@ -212,6 +228,18 @@ class Controller:
             self.v2 -= 1
             if self.v2 < 0:
                 self.v2 += 100
+        if self.currentItem == "hbarS":
+            self.selectingH -= 1
+            if self.selectingH < 0:
+                self.selectingH += 100
+        if self.currentItem == "sbarS":
+            self.selectingS -= 1
+            if self.selectingS < 0:
+                self.selectingS += 100
+        if self.currentItem == "vbarS":
+            self.selectingV -= 1
+            if self.selectingV < 0:
+                self.selectingV += 100
 
     def createDisplay(self):
         self.screen.fill((0, 0, 0))
@@ -276,6 +304,25 @@ class Controller:
                                 vRect = pygame.Rect(415 + (3 * v), 5 + (110 * rightItem), 3, 100)
                                 pygame.draw.rect(self.screen, self.hsv2rgb_pg(self.h2, self.s2, v), vRect)
                                 if v == self.v2:
+                                    pygame.draw.rect(self.screen, (255, 255, 255), vRect)
+                    if "S" in rightList[rightItem]:
+                        if rightList[rightItem][0] == "h":
+                            for h in range(100):
+                                hRect = pygame.Rect(415 + (3 * h), 5 + (110 * rightItem), 3, 100)
+                                pygame.draw.rect(self.screen, self.hsv2rgb_pg(h, self.selectingS, self.selectingV), hRect)
+                                if h == self.selectingH:
+                                    pygame.draw.rect(self.screen, (255, 255, 255), hRect)
+                        if rightList[rightItem][0] == "s":
+                            for s in range(100):
+                                sRect = pygame.Rect(415 + (3 * s), 5 + (110 * rightItem), 3, 100)
+                                pygame.draw.rect(self.screen, self.hsv2rgb_pg(self.selectingH, s, self.selectingV), sRect)
+                                if s == self.selectingS:
+                                    pygame.draw.rect(self.screen, (255, 255, 255), sRect)
+                        if rightList[rightItem][0] == "v":
+                            for v in range(100):
+                                vRect = pygame.Rect(415 + (3 * v), 5 + (110 * rightItem), 3, 100)
+                                pygame.draw.rect(self.screen, self.hsv2rgb_pg(self.selectingH, self.selectingS, v), vRect)
+                                if v == self.selectingV:
                                     pygame.draw.rect(self.screen, (255, 255, 255), vRect)
                 else:
                     if rightItem == self.columnpos:
