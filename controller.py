@@ -30,7 +30,7 @@ class Controller:
     def updateStrip(self, strip):
         for i in range(self.npixels):
             current = self.indices[self.currentpattern][i]
-            strip.setPixelColor(i, current[0], current[1], current[2])
+            strip.setPixelColor(i, Color(self.indices[self.currentpattern][i, 0], self.indices[self.currentpattern][i, 1], self.indices[self.currentpattern][i, 2]))
         strip.show()
 
     def advancePatterns(self):
@@ -40,9 +40,9 @@ class Controller:
                     colors = self.hsv2rgb_pg(self.h1, self.s1, self.v1)
                 else:
                     colors = self.hsv2rgb_pg(self.h2, self.s2, self.v2)
-                self.indices[self.currentpattern, 0] = colors[0]
-                self.indices[self.currentpattern, 1] = colors[1]
-                self.indices[self.currentpattern, 2] = colors[2]
+                self.indices[self.currentpattern][i, 0] = colors[0]
+                self.indices[self.currentpattern][i, 1] = colors[1]
+                self.indices[self.currentpattern][i, 2] = colors[2]
 
     def rightInput(self):
         if self.currentItem == None:
