@@ -29,7 +29,7 @@ class Controller:
     
     def updateStrip(self, strip):
         for i in range(self.npixels):
-            strip.setPixelColor(i, Color(self.indices[self.currentpattern, 0], self.indices[self.currentpattern, 1], self.indices[self.currentpattern, 2]))
+            strip.setPixelColor(i, Color(self.indices[self.currentpattern][i, 0], self.indices[self.currentpattern][i, 1], self.indices[self.currentpattern][i, 2]))
         strip.show()
 
     def advancePatterns(self):
