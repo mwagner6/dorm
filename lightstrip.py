@@ -5,7 +5,7 @@ import RPi.GPIO as GPIO
 from encoder import Encoder
 import colorsys
 import pygame
-from menu import Menu
+from controller import Controller
 import sys
 led_count = 600
 lightstrip_datapin = 18
@@ -14,16 +14,16 @@ led_dma = 10
 led_brightness = 255
 led_invert = False
 led_channel = 0
-menu = Menu()
+controller = Controller()
 
 strip = Adafruit_NeoPixel(led_count, lightstrip_datapin, led_hz, led_dma, led_invert, led_brightness, led_channel)
 strip.begin()
 
 def valueChanged(value, direction):
     if direction == 'R':
-        menu.rotaryRight()
+        controller.rotaryRight()
     else:
-        menu.rotaryLeft()
+        controller.rotaryLeft()
     
 def hsv2rgb(h, s, v):
     outvalues = colorsys.hsv_to_rgb(h/100, s/100, v/100)
@@ -44,17 +44,14 @@ while True:
             sys.exit()
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_LEFT:
-                menu.leftInput()
+                controller.leftInput()
             if event.key == pygame.K_RIGHT:
-                menu.rightInput()
+                controller.rightInput()
             if event.key == pygame.K_UP:
-                menu.upInput()
+                controller.upInput()
             if event.key == pygame.K_DOWN:
-                menu.downInput()
-    for i in range(led_count):
-        if i % 2 == 0:
-            strip.setPixelColor(i, hsv2rgb(menu.h1, menu.s1, menu.v1))
-        else:
-            strip.setPixelColor(i, hsv2rgb(menu.h2, menu.s2, menu.v2))
-    strip.show()
-    menu.createDisplay()
+                controller.downInput()
+            if event.key == pygame.K_KP_ENTER:
+                controller.clickInput()
+    controller.updateStrip()
+    controller.createDisplay()

@@ -1,4 +1,4 @@
-from menu import Menu
+from controller import Menu
 import pygame
 import sys
 mymenu = Menu()
