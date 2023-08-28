@@ -102,7 +102,7 @@ class Controller:
                 self.positioncounter = 0
             if self.positioncounter < 100:
                 sinpos = self.positioncounter * np.pi / 100
-                color = self.hsv2rgb_ph(self.h1, self.s1, self.v1)
+                color = self.hsv2rgb_pg(self.h1, self.s1, self.v1)
             else:
                 sinpos = (self.positioncounter - 100) * np.pi / 100
                 color = self.hsv2rgb_pg(self.h2, self.s2, self.v2)
