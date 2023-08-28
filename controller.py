@@ -62,7 +62,8 @@ class Controller:
                 star[1] -= 1
                 for d in range(-5, 6):
                     dist = abs(d)
-                    lightvals[star[0]+d] += (1 - dist*0.18) * star[1]/100
+                    if star[0]+d < len(lightvals) and star[0]+d >= 0:
+                        lightvals[star[0]+d] += (1 - dist*0.18) * star[1]/100
             for i in range(self.npixels):
                 if lightvals[i] > 1:
                     lightvals[i] = 1
@@ -71,6 +72,13 @@ class Controller:
                 self.indices[self.currentpattern][i, 0] = lightvals[i] * colors1[0] + (1-lightvals[i]) * colors2[0]
                 self.indices[self.currentpattern][i, 1] = lightvals[i] * colors1[1] + (1-lightvals[i]) * colors2[1]
                 self.indices[self.currentpattern][i, 2] = lightvals[i] * colors1[2] + (1-lightvals[i]) * colors2[2]
+        remindices = []
+        for i in self.stars:
+            if self.stars[i][1] == 0:
+                remindices.append(i)
+        for index in sorted(remindices, reverse=True):
+            del self.stars[index]
+            
 
         if self.currentpattern == 'twocolor':
             for i in range(self.npixels):
