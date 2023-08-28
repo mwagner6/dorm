@@ -60,7 +60,7 @@ class Controller:
                     self.stars.append([i, 100])
             for star in self.stars:
                 star[1] -= 1
-                for d in range(-5, 6):
+                for d in range(-1, 2):
                     dist = abs(d)
                     if star[0]+d < len(lightvals) and star[0]+d >= 0:
                         lightvals[star[0]+d] += (1 - dist*0.18) * star[1]/100
