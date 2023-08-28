@@ -9,6 +9,7 @@ class Controller:
         self.sections = ["Pattern", "Color 1", "Color 2"]
         self.currentSection = 0
         self.columnpos = 0
+        self.npixels = npixels
         self.menus = {"Pattern": ["rainbow", "singlecolor", "stars", "gradient", "breathing", "twocolor"], "Color 1": ["hbar1", "sbar1", "vbar1"], "Color 2": ["hbar2", "sbar2", "vbar2"]}
         self.indices = {"rainbow": np.zeros((npixels, 3)), "singlecolor": np.zeros((npixels, 3)), "stars": np.zeros((npixels, 3)), "gradient": np.zeros((npixels, 3)), "breathing": np.zeros((npixels, 3)), "twocolor": np.zeros((npixels, 3))}
         self.currentpattern = 'twocolor'
@@ -30,6 +31,17 @@ class Controller:
         for i in range(self.npixels):
             strip.setPixelColor(i, Color(self.indices[self.currentpattern, 0], self.indices[self.currentpattern, 1], self.indices[self.currentpattern, 2]))
         strip.show()
+
+    def advancePatterns(self):
+        if self.currentpattern == 'twocolor':
+            for i in range(self.npixels):
+                if i % 2 == 0:
+                    colors = self.hsv2rgb_pg(self.h1, self.s1, self.v1)
+                else:
+                    colors = self.hsv2rgb_pg(self.h2, self.s2, self.v2)
+                self.indices[self.currentpattern, 0] = colors[0]
+                self.indices[self.currentpattern, 1] = colors[1]
+                self.indices[self.currentpattern, 2] = colors[2]
 
     def rightInput(self):
         if self.currentItem == None:

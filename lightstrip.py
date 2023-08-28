@@ -53,5 +53,6 @@ while True:
                 controller.downInput()
             if event.key == pygame.K_KP_ENTER:
                 controller.clickInput()
-    controller.updateStrip()
+    controller.advancePatterns()
+    controller.updateStrip(strip)
     controller.createDisplay()
