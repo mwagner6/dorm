@@ -44,7 +44,7 @@ class Controller:
     def updateStrip(self, strip):
         for i in range(self.npixels):
             current = self.indices[self.currentpattern][i]
-            strip.setPixelColor(i, Color(self.indices[self.currentpattern][i, 0] * self.brightness, self.indices[self.currentpattern][i, 1] * self.brightness, self.indices[self.currentpattern][i, 2] * self.brightness))
+            strip.setPixelColor(i, Color(int(self.indices[self.currentpattern][i, 0] * self.brightness), int(self.indices[self.currentpattern][i, 1] * self.brightness), int(self.indices[self.currentpattern][i, 2] * self.brightness)))
         strip.show()
     
     def simImg(self):
