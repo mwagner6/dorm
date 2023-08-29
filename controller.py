@@ -10,11 +10,12 @@ except:
 
 class Controller:
     def __init__(self, npixels):
-        self.sections = ["Pattern", "Color 1", "Color 2", "Add Colors", "Clear Colors"]
+        self.sections = ["Pattern", "Color 1", "Color 2", "Add Colors", "Clear Colors", "Brightness"]
+        self.brightness = 1
         self.currentSection = 0
         self.columnpos = 0
         self.npixels = npixels
-        self.menus = {"Pattern": ["rainbow", "singlecolor", "stars", "gradient", "breathing", "twocolor", "shootertrails", "shooters"], "Color 1": ["hbar1", "sbar1", "vbar1"], "Color 2": ["hbar2", "sbar2", "vbar2"], "Add Colors": ["hbarS", "sbarS", "vbarS"], "Clear Colors": ["Reset Colors"]}
+        self.menus = {"Pattern": ["rainbow", "singlecolor", "stars", "gradient", "breathing", "twocolor", "shootertrails", "shooters"], "Color 1": ["hbar1", "sbar1", "vbar1"], "Color 2": ["hbar2", "sbar2", "vbar2"], "Add Colors": ["hbarS", "sbarS", "vbarS"], "Clear Colors": ["Reset Colors"], "Brightness": ['Bbar']}
         self.indices = {"rainbow": np.zeros((npixels, 3), dtype=np.uint8), "singlecolor": np.zeros((npixels, 3), dtype=np.uint8), "stars": np.zeros((npixels, 3), dtype=np.uint8), "gradient": np.zeros((npixels, 3), dtype=np.uint8), "breathing": np.zeros((npixels, 3), dtype=np.uint8), "twocolor": np.zeros((npixels, 3), dtype=np.uint8), "shootertrails": np.zeros((npixels, 3), dtype=np.uint8), "shooters": np.zeros((npixels, 3), dtype=np.uint8)}
         self.stars = []
         self.shooters = []
@@ -43,7 +44,7 @@ class Controller:
     def updateStrip(self, strip):
         for i in range(self.npixels):
             current = self.indices[self.currentpattern][i]
-            strip.setPixelColor(i, Color(self.indices[self.currentpattern][i, 0], self.indices[self.currentpattern][i, 1], self.indices[self.currentpattern][i, 2]))
+            strip.setPixelColor(i, Color(self.indices[self.currentpattern][i, 0] * self.brightness, self.indices[self.currentpattern][i, 1] * self.brightness, self.indices[self.currentpattern][i, 2] * self.brightness))
         strip.show()
     
     def simImg(self):
@@ -289,6 +290,8 @@ class Controller:
             self.selectingV += 1
             if self.selectingV > 100:
                 self.selectingV -= 100
+        if self.currentItem == "Bbar" and self.brightness < 1:
+            self.brightness += 0.02
 
     def rotaryLeft(self):
         if self.currentItem == "hbar1":
@@ -327,6 +330,8 @@ class Controller:
             self.selectingV -= 1
             if self.selectingV < 0:
                 self.selectingV += 100
+        if self.currentItem == "Bbar" and self.brightness > 0:
+            self.brightness -= 0.02 
 
     def createDisplay(self):
         self.screen.fill((0, 0, 0))
@@ -411,6 +416,12 @@ class Controller:
                                 pygame.draw.rect(self.screen, self.hsv2rgb_pg(self.selectingH, self.selectingS, v), vRect)
                                 if v == self.selectingV:
                                     pygame.draw.rect(self.screen, (255, 255, 255), vRect)
+                    if "B" in rightList[rightItem]:
+                        for b in range(100):
+                            bRect = pygame.Rect(415 + (3 * b), 5 + (110 * rightItem), 3, 100)
+                            pygame.draw.rect(self.screen, self.hsv2rgb_pg(0, 0, b), bRect)
+                            if b == int(self.brightness * 100):
+                                pygame.draw.rect(self.screen, self.hsv2rgb_pg(b, 100, 100), vRect)
                 else:
                     if rightItem == self.columnpos:
                         text = font.render(rightList[rightItem], False, (0, 0, 0))
