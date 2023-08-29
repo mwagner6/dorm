@@ -2,7 +2,7 @@ import pygame
 import random
 import numpy as np
 import colorsys
-from rpi_ws281x import *
+#from rpi_ws281x import *
 
 
 class Controller:
@@ -42,7 +42,27 @@ class Controller:
             current = self.indices[self.currentpattern][i]
             strip.setPixelColor(i, Color(self.indices[self.currentpattern][i, 0], self.indices[self.currentpattern][i, 1], self.indices[self.currentpattern][i, 2]))
         strip.show()
-
+    
+    def simImg(self):
+        img = np.zeros((1270, 1770, 3))
+        for i in range(175):
+            img[0:10, 10*(i+1):10*(i+2), 0] = self.indices[self.currentpattern][i, 0]
+            img[0:10, 10*(i+1):10*(i+2), 1] = self.indices[self.currentpattern][i, 1]
+            img[0:10, 10*(i+1):10*(i+2), 2] = self.indices[self.currentpattern][i, 2]
+        for i in range(125):
+            img[10*(i+1):10*(i+2), 1760:1770, 0] = self.indices[self.currentpattern][i+175, 0]
+            img[10*(i+1):10*(i+2), 1760:1770, 1] = self.indices[self.currentpattern][i+175, 1]
+            img[10*(i+1):10*(i+2), 1760:1770, 2] = self.indices[self.currentpattern][i+175, 2]
+        for i in range(175):
+            img[1260:1270, 10*(174-i):10*(175-i), 0] = self.indices[self.currentpattern][i+300, 0]
+            img[1260:1270, 10*(174-i):10*(175-i), 1] = self.indices[self.currentpattern][i+300, 1]
+            img[1260:1270, 10*(174-i):10*(175-i), 2] = self.indices[self.currentpattern][i+300, 2]
+        for i in range(125):
+            img[10*(124-i):10*(125-i), 0:10, 0] = self.indices[self.currentpattern][i+475, 0]
+            img[10*(124-i):10*(125-i), 0:10, 1] = self.indices[self.currentpattern][i+475, 1]
+            img[10*(124-i):10*(125-i), 0:10, 2] = self.indices[self.currentpattern][i+475, 2]
+        return img
+    
     def advancePatterns(self):
         if self.currentpattern == 'rainbow':
             self.positioncounter += 1
