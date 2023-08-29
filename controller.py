@@ -2,7 +2,10 @@ import pygame
 import random
 import numpy as np
 import colorsys
-#from rpi_ws281x import *
+try:
+    from rpi_ws281x import *
+except:
+    pass
 
 
 class Controller:
