@@ -421,7 +421,7 @@ class Controller:
                             bRect = pygame.Rect(415 + (3 * b), 5 + (110 * rightItem), 3, 100)
                             pygame.draw.rect(self.screen, self.hsv2rgb_pg(0, 0, b), bRect)
                             if b == int(self.brightness * 100):
-                                pygame.draw.rect(self.screen, self.hsv2rgb_pg(b, 100, 100), vRect)
+                                pygame.draw.rect(self.screen, self.hsv2rgb_pg(b, 100, 100), bRect)
                 else:
                     if rightItem == self.columnpos:
                         text = font.render(rightList[rightItem], False, (0, 0, 0))
