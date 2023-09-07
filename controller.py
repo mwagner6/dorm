@@ -216,7 +216,7 @@ class Controller:
             midnight = now.replace(hour=0, minute=0, second=0)
             minutespassed = (now-midnight).seconds / 60
             waketimeMin = self.wakeH * 60 + self.wakeM
-            sunColor = [237, 215, 158]
+            sunColor = [255, 235, 158]
             if minutespassed > waketimeMin - 30:
                 scaleUp = (minutespassed - waketimeMin) * 1/30
                 for i in range(self.npixels):
@@ -352,7 +352,7 @@ class Controller:
     def createDisplay(self):
         self.screen.fill((0, 0, 0))
         font_name = "ShareTechMono-Regular.ttf"
-        font = pygame.font.Font(font_name, 50)
+        font = pygame.font.Font(font_name, 35)
         for leftItem in range(len(self.sections)):
             if leftItem == self.currentSection:
                 text = font.render(self.sections[leftItem], False, (0, 0, 0))
@@ -442,13 +442,13 @@ class Controller:
                     if rightItem == self.columnpos:
                         text = font.render(rightList[rightItem], False, (0, 0, 0))
                         textRect = text.get_rect()
-                        textRect.topleft = (410, 50 * rightItem)
+                        textRect.topleft = (410, 35 * rightItem)
                         pygame.draw.rect(self.screen, (255, 255, 255), textRect)
                         self.screen.blit(text, textRect)
                     else:
                         text = font.render(rightList[rightItem], False, (255, 255, 255))
                         textRect = text.get_rect()
-                        textRect.topleft = (410, 50 * rightItem)
+                        textRect.topleft = (410, 35 * rightItem)
                         self.screen.blit(text, textRect)
 
         pygame.display.flip()
