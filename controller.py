@@ -220,9 +220,9 @@ class Controller:
             if minutespassed > waketimeMin - 30:
                 scaleUp = (minutespassed - waketimeMin) * 1/30
                 for i in range(self.npixels):
-                    self.indices[self.currentpattern][i, 0] = scaleUp * sunColor[0]
-                    self.indices[self.currentpattern][i, 1] = scaleUp * sunColor[1]
-                    self.indices[self.currentpattern][i, 2] = scaleUp * sunColor[2]
+                    self.indices[self.currentpattern][i, 0] = int(scaleUp * sunColor[0])
+                    self.indices[self.currentpattern][i, 1] = int(scaleUp * sunColor[1])
+                    self.indices[self.currentpattern][i, 2] = int(scaleUp * sunColor[2])
                     
 
     def rightInput(self):
