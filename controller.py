@@ -216,7 +216,7 @@ class Controller:
             midnight = now.replace(hour=0, minute=0, second=0)
             minutespassed = (now-midnight).seconds / 60
             waketimeMin = self.wakeH * 60 + self.wakeM
-            sunColor = [255, 235, 158]
+            sunColor = [250, 235, 158]
             if minutespassed > waketimeMin - 30:
                 scaleUp = (minutespassed - waketimeMin) * 1/30
                 if scaleUp > 1:
