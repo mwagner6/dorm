@@ -1,3 +1,4 @@
+
 import pygame
 import random
 import numpy as np
@@ -21,7 +22,7 @@ class Controller:
         self.stars = []
         self.shooters = []
         self.wakeH = 12
-        self.wakeM = 30
+        self.wakeM = 20
         self.shootertimer = 0
         self.currentcolor = 0
         self.currentpattern = 'rainbow'
@@ -218,7 +219,7 @@ class Controller:
             waketimeMin = self.wakeH * 60 + self.wakeM
             sunColor = [250, 235, 158]
             if minutespassed > waketimeMin - 30:
-                scaleUp = (waketimeMin - minutespassed) * 1/30
+                scaleUp = (30-(waketimeMin - minutespassed)) * 1/30
                 if scaleUp > 1:
                     scaleUp = 1
                 if scaleUp < 0:
