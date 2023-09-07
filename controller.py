@@ -21,7 +21,7 @@ class Controller:
         self.stars = []
         self.shooters = []
         self.wakeH = 12
-        self.wakeM = 0
+        self.wakeM = 30
         self.shootertimer = 0
         self.currentcolor = 0
         self.currentpattern = 'rainbow'
