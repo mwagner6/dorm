@@ -215,14 +215,14 @@ class Controller:
             now = datetime.now()
             midnight = now.replace(hour=0, minute=0, second=0)
             minutespassed = (now-midnight).seconds / 60
-            print(minutespassed)
             waketimeMin = self.wakeH * 60 + self.wakeM
-            print(waketimeMin)
             sunColor = [250, 235, 158]
             if minutespassed > waketimeMin - 30:
-                scaleUp = (minutespassed - waketimeMin) * 1/30
+                scaleUp = (waketimeMin - minutespassed) * 1/30
                 if scaleUp > 1:
                     scaleUp = 1
+                if scaleUp < 0:
+                    scaleUp = 0
                 for i in range(self.npixels):
                     self.indices[self.currentpattern][i, 0] = int(scaleUp * sunColor[0])
                     self.indices[self.currentpattern][i, 1] = int(scaleUp * sunColor[1])
