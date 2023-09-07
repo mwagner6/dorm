@@ -219,6 +219,8 @@ class Controller:
             sunColor = [255, 235, 158]
             if minutespassed > waketimeMin - 30:
                 scaleUp = (minutespassed - waketimeMin) * 1/30
+                if scaleUp > 1:
+                    scaleUp = 1
                 for i in range(self.npixels):
                     self.indices[self.currentpattern][i, 0] = int(scaleUp * sunColor[0])
                     self.indices[self.currentpattern][i, 1] = int(scaleUp * sunColor[1])
