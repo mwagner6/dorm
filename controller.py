@@ -17,11 +17,11 @@ class Controller:
         self.currentSection = 0
         self.columnpos = 0
         self.npixels = npixels
-        self.menus = {"Pattern": ["rainbow", "singlecolor", "stars", "gradient", "breathing", "twocolor", "shootertrails", "shooters", "wakeup"], "Color 1": ["hbar1", "sbar1", "vbar1"], "Color 2": ["hbar2", "sbar2", "vbar2"], "Add Colors": ["hbarS", "sbarS", "vbarS"], "Clear Colors": ["Reset Colors"], "Brightness": ['Bbar'], "Waketime":["wakeTime"]}
+        self.menus = {"Pattern": ["rainbow", "singlecolor", "stars", "gradient", "breathing", "twocolor", "shootertrails", "shooters", "wakeup"], "Color 1": ["hbar1", "sbar1", "vbar1"], "Color 2": ["hbar2", "sbar2", "vbar2"], "Add Colors": ["hbarS", "sbarS", "vbarS"], "Clear Colors": ["Reset Colors"], "Brightness": ['Bbar'], "Wake Time":["wakeTime"]}
         self.indices = {"rainbow": np.zeros((npixels, 3), dtype=np.uint8), "singlecolor": np.zeros((npixels, 3), dtype=np.uint8), "stars": np.zeros((npixels, 3), dtype=np.uint8), "gradient": np.zeros((npixels, 3), dtype=np.uint8), "breathing": np.zeros((npixels, 3), dtype=np.uint8), "twocolor": np.zeros((npixels, 3), dtype=np.uint8), "shootertrails": np.zeros((npixels, 3), dtype=np.uint8), "shooters": np.zeros((npixels, 3), dtype=np.uint8), "wakeup": np.zeros((npixels, 3))}
         self.stars = []
         self.shooters = []
-        self.wakeH = 12
+        self.wakeH = 9
         self.wakeM = 50
         self.shootertimer = 0
         self.currentcolor = 0
@@ -314,6 +314,14 @@ class Controller:
                 self.selectingV -= 100
         if self.currentItem == "Bbar" and self.brightness < 1:
             self.brightness += 0.02
+        if self.currentItem == "wakeTime":
+            self.wakeM += 1
+            if self.wakeM == 60:
+                self.wakeM = 0
+                self.wakeH += 1
+                if self.wakeH > 11:
+                    self.wakeH = 6
+    
 
     def rotaryLeft(self):
         if self.currentItem == "hbar1":
@@ -354,6 +362,13 @@ class Controller:
                 self.selectingV += 100
         if self.currentItem == "Bbar" and self.brightness > 0:
             self.brightness -= 0.02 
+        if self.currentItem == "wakeTime":
+            self.wakeM -= 1
+            if self.wakeM < 0:
+                self.wakeM = 59
+                self.wakeH -= 1
+                if self.wakeH < 6:
+                    self.wakeH = 11
 
     def createDisplay(self):
         self.screen.fill((0, 0, 0))
@@ -444,6 +459,22 @@ class Controller:
                             pygame.draw.rect(self.screen, self.hsv2rgb_pg(0, 0, b), bRect)
                             if b == int(self.brightness * 100):
                                 pygame.draw.rect(self.screen, self.hsv2rgb_pg(b, 100, 100), bRect)
+                elif rightList[rightItem] == 'wakeTime':
+                    if len(str(self.wakeM)) == 1:
+                        minutestr = '0' + str(self.wakeM)
+                    else:
+                        minutestr = str(self.wakeM)
+                    if rightItem == self.columnpos:
+                        text = font.render(str(self.wakeH) + ':' + minutestr + 'AM', False, (0, 0, 0))
+                        textRect = text.get_rect()
+                        textRect.topleft = (410, 35 * rightItem)
+                        pygame.draw.rect(self.screen, (255, 255, 255), textRect)
+                        self.screen.blit(text, textRect)
+                    else:
+                        text = font.render(str(self.wakeH) + ':' + minutestr + 'AM', False, (255, 255, 255))
+                        textRect = text.get_rect()
+                        textRect.topleft = (410, 35 * rightItem)
+                        self.screen.blit(text, textRect)
                 else:
                     if rightItem == self.columnpos:
                         text = font.render(rightList[rightItem], False, (0, 0, 0))
