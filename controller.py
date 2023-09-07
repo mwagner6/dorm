@@ -2,6 +2,7 @@ import pygame
 import random
 import numpy as np
 import colorsys
+from datetime import datetime
 try:
     from rpi_ws281x import *
 except:
@@ -10,18 +11,20 @@ except:
 
 class Controller:
     def __init__(self, npixels):
-        self.sections = ["Pattern", "Color 1", "Color 2", "Add Colors", "Clear Colors", "Brightness"]
+        self.sections = ["Pattern", "Color 1", "Color 2", "Add Colors", "Clear Colors", "Brightness", "Wake Time"]
         self.brightness = 1
         self.currentSection = 0
         self.columnpos = 0
         self.npixels = npixels
-        self.menus = {"Pattern": ["rainbow", "singlecolor", "stars", "gradient", "breathing", "twocolor", "shootertrails", "shooters"], "Color 1": ["hbar1", "sbar1", "vbar1"], "Color 2": ["hbar2", "sbar2", "vbar2"], "Add Colors": ["hbarS", "sbarS", "vbarS"], "Clear Colors": ["Reset Colors"], "Brightness": ['Bbar']}
-        self.indices = {"rainbow": np.zeros((npixels, 3), dtype=np.uint8), "singlecolor": np.zeros((npixels, 3), dtype=np.uint8), "stars": np.zeros((npixels, 3), dtype=np.uint8), "gradient": np.zeros((npixels, 3), dtype=np.uint8), "breathing": np.zeros((npixels, 3), dtype=np.uint8), "twocolor": np.zeros((npixels, 3), dtype=np.uint8), "shootertrails": np.zeros((npixels, 3), dtype=np.uint8), "shooters": np.zeros((npixels, 3), dtype=np.uint8)}
+        self.menus = {"Pattern": ["rainbow", "singlecolor", "stars", "gradient", "breathing", "twocolor", "shootertrails", "shooters", "wakeup"], "Color 1": ["hbar1", "sbar1", "vbar1"], "Color 2": ["hbar2", "sbar2", "vbar2"], "Add Colors": ["hbarS", "sbarS", "vbarS"], "Clear Colors": ["Reset Colors"], "Brightness": ['Bbar'], "Waketime":["wakeTime"]}
+        self.indices = {"rainbow": np.zeros((npixels, 3), dtype=np.uint8), "singlecolor": np.zeros((npixels, 3), dtype=np.uint8), "stars": np.zeros((npixels, 3), dtype=np.uint8), "gradient": np.zeros((npixels, 3), dtype=np.uint8), "breathing": np.zeros((npixels, 3), dtype=np.uint8), "twocolor": np.zeros((npixels, 3), dtype=np.uint8), "shootertrails": np.zeros((npixels, 3), dtype=np.uint8), "shooters": np.zeros((npixels, 3), dtype=np.uint8), "wakeup": np.zeros((npixels, 3))}
         self.stars = []
         self.shooters = []
+        self.wakeH = 12
+        self.wakeM = 0
         self.shootertimer = 0
         self.currentcolor = 0
-        self.currentpattern = 'twocolor'
+        self.currentpattern = 'rainbow'
         self.positioncounter = 0
         self.h1 = 0
         self.s1 = 0
@@ -207,6 +210,19 @@ class Controller:
                         self.indices[self.currentpattern][shooter[0]-i, 0] = shooter[1][0] * (0.4 ** i)
                         self.indices[self.currentpattern][shooter[0]-i, 1] = shooter[1][1] * (0.4 ** i)
                         self.indices[self.currentpattern][shooter[0]-i, 2] = shooter[1][2] * (0.4 ** i)
+        
+        if self.currentpattern == 'wakeup':
+            now = datetime.now()
+            midnight = now.replace(hour=0, minute=0, second=0)
+            minutespassed = (now-midnight).seconds / 60
+            waketimeMin = self.wakeH * 60 + self.wakeM
+            sunColor = [237, 215, 158]
+            if minutespassed > waketimeMin - 30:
+                scaleUp = (minutespassed - waketimeMin) * 1/30
+                for i in range(self.npixels):
+                    self.indices[self.currentpattern][i, 0] = scaleUp * sunColor[0]
+                    self.indices[self.currentpattern][i, 1] = scaleUp * sunColor[1]
+                    self.indices[self.currentpattern][i, 2] = scaleUp * sunColor[2]
                     
 
     def rightInput(self):
