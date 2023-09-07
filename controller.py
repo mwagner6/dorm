@@ -22,7 +22,7 @@ class Controller:
         self.stars = []
         self.shooters = []
         self.wakeH = 12
-        self.wakeM = 20
+        self.wakeM = 50
         self.shootertimer = 0
         self.currentcolor = 0
         self.currentpattern = 'rainbow'
@@ -224,6 +224,7 @@ class Controller:
                     scaleUp = 1
                 if scaleUp < 0:
                     scaleUp = 0
+                print(scaleUp * sunColor[0])
                 for i in range(self.npixels):
                     self.indices[self.currentpattern][i, 0] = int(scaleUp * sunColor[0])
                     self.indices[self.currentpattern][i, 1] = int(scaleUp * sunColor[1])
