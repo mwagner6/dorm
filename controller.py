@@ -203,7 +203,7 @@ class Controller:
             for shooter in self.shooters:
                 shooter[0] += 1
                 if shooter[0] == self.npixels:
-                    del shooter
+                    self.shooters.pop()
                 else:
                     for i in range(0, 15):
                         if shooter[0]-i >= self.npixels-2:
