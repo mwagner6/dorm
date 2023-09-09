@@ -1,0 +1,8 @@
+{
+    "Latte" : {"coffee" : 200, "milk" : 300},
+    "Lemonade" : {"lemon" : 20, "water" : 400, "syrup" : 80},
+    "Limeade" : {"lime" : 20, "water" : 400, "syrup" : 80},
+    "Milk" : {"milk" : 500},
+    "Black Coffee" : {"coffee" : 500},
+    "Water" : {"water" : 500}
+}
