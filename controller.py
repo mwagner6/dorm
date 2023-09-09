@@ -173,7 +173,7 @@ class Controller:
             for shooter in self.shooters:
                 shooter[0] += 1
                 if shooter[0] == self.npixels:
-                    del shooter
+                    self.shooters.pop()
                 else:
                     for i in range(0, 6):
                         if shooter[0]-i >= self.npixels-2:
@@ -224,11 +224,13 @@ class Controller:
                     scaleUp = 1
                 if scaleUp < 0:
                     scaleUp = 0
-                print(scaleUp * sunColor[0])
                 for i in range(self.npixels):
                     self.indices[self.currentpattern][i, 0] = int(scaleUp * sunColor[0])
                     self.indices[self.currentpattern][i, 1] = int(scaleUp * sunColor[1])
                     self.indices[self.currentpattern][i, 2] = int(scaleUp * sunColor[2])
+            else:
+                for i in range(self.npixels):
+                    self.indices[self.currentpattern][i, :] = 0
                     
 
     def rightInput(self):
